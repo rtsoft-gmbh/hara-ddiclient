@@ -133,6 +133,9 @@ class DdiClientDefaultImpl private constructor(private val ddiRestApi: DdiRestAp
                 if (targetToken != null) {
                     authentications.add(Authentication.newInstance(Authentication.AuthenticationType.TARGET_TOKEN_AUTHENTICATION, targetToken!!))
                 }
+                if (mtlsAuthData != null) {
+                    mtlsAuthData!!.apply(httpBuilder)
+                }
                 httpBuilder.interceptors().add(0, HawkbitAuthenticationRequestInterceptor(authentications))
                 val ddiRestApi = Retrofit.Builder()
                         .baseUrl(serverUrl)

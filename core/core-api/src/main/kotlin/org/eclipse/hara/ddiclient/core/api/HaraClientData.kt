@@ -24,6 +24,8 @@ import java.net.URL
  * on the Update Server. It is different for each tenant.
  * @property targetToken used by the client to authenticate itself
  * on the Update Server. It is different for each device.
+ * @property mtlsAuthData used by client to authenticate itself
+ * on the Update Server via mTLS. It is different for each device.
  */
 data class HaraClientData constructor(
         val tenant: String,
@@ -31,6 +33,7 @@ data class HaraClientData constructor(
         val serverUrl: String,
         val gatewayToken: String? = null,
         val targetToken: String? = null,
+        val mtlsAuthData: HaraClientMTLSAuthData? = null,
 ) {
 
     init {
@@ -38,8 +41,9 @@ data class HaraClientData constructor(
         notEmpty(controllerId, "controllerId")
         notEmpty(serverUrl, "serverUrl")
         validUrl(serverUrl, "serverUrl")
-        if ((gatewayToken == null || gatewayToken.isBlank()) && (targetToken == null || targetToken.isBlank())) {
-            throw IllegalStateException("gatewayToken and targetToken cannot both be empty")
+        if ((gatewayToken == null || gatewayToken.isBlank()) && (targetToken == null || targetToken.isBlank())
+                && mtlsAuthData == null) {
+            throw IllegalStateException("gatewayToken, targetToken and mtlsAuthData cannot be empty at same time")
         }
     }
 
